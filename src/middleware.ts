@@ -21,6 +21,11 @@ export default function middleware(req: NextRequest, evt: NextFetchEvent) {
     );
   }
 
+  if (!hasClerkEnv) {
+    // Allow non-protected routes to function even if Clerk isn't configured yet.
+    return NextResponse.next();
+  }
+
   return withClerk(req, evt);
 }
 
