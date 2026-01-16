@@ -26,13 +26,13 @@ export async function GET() {
   const docs = await listApiKeysByUser(userId);
   const keys = docs.map((d) => ({
     id: d._id.toString(),
-    userId: d.userId,
     name: d.name,
-    keyPrefix: d.keyPrefix,
-    keyLast4: d.keyLast4,
+    prefix: d.keyPrefix,
+    last4: d.keyLast4,
     createdAt: d.createdAt,
     revokedAt: d.revokedAt,
     lastUsedAt: d.lastUsedAt,
+    status: d.revokedAt ? ("revoked" as const) : ("active" as const),
   }));
 
   return NextResponse.json({ keys });
@@ -75,15 +75,15 @@ export async function POST(req: Request) {
   });
 
   return NextResponse.json({
-    apiKey: rawKey, // shown only once (on creation)
+    rawKey, // shown only once (on creation)
     key: {
       id: insert.insertedId.toString(),
       name: parsed.data.name,
-      keyPrefix,
-      keyLast4,
+      prefix: keyPrefix,
+      last4: keyLast4,
       createdAt: new Date(),
-      revokedAt: null,
       lastUsedAt: null,
+      status: "active" as const,
     },
   });
 }

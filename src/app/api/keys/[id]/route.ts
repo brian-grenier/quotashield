@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { ObjectId } from "mongodb";
 
-import { revokeApiKeyByIdForUser } from "@/models/apiKeys";
+import { findApiKeyByIdForUser, revokeApiKeyByIdForUser } from "@/models/apiKeys";
 import { writeAuditLog } from "@/models/auditLogs";
 
 export async function DELETE(
@@ -28,16 +28,18 @@ export async function DELETE(
     return NextResponse.json({ error: "Invalid id" }, { status: 400 });
   }
 
-  const res = await revokeApiKeyByIdForUser(id, userId);
-  if (res.matchedCount === 0) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
-  }
+  const existing = await findApiKeyByIdForUser(id, userId);
+  if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  await writeAuditLog({
-    userId,
-    action: "KEY_REVOKED",
-    meta: { keyId: id },
-  });
+  // Idempotent: if already revoked, succeed without changing anything.
+  if (!existing.revokedAt) {
+    await revokeApiKeyByIdForUser(id, userId);
+    await writeAuditLog({
+      userId,
+      action: "KEY_REVOKED",
+      meta: { keyId: id },
+    });
+  }
 
   return NextResponse.json({ ok: true });
 }
