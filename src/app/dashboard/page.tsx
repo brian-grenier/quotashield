@@ -1,4 +1,11 @@
-export default function DashboardPage() {
-  return <div className="p-8">Dashboard</div>;
+import { auth } from "@clerk/nextjs/server";
+
+import DashboardClient from "./ui";
+
+export default async function DashboardPage() {
+  const { userId, redirectToSignIn } = await auth();
+  if (!userId) return redirectToSignIn();
+
+  return <DashboardClient />;
 }
 

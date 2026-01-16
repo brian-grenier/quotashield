@@ -41,6 +41,16 @@ export async function listApiKeysByUser(userId: string): Promise<ApiKeyDocWithId
   return await col.find({ userId }).sort({ createdAt: -1 }).toArray();
 }
 
+export async function listActiveApiKeysByUser(userId: string): Promise<ApiKeyDocWithId[]> {
+  const col = await apiKeysCollection();
+  return await col.find({ userId, revokedAt: null }).sort({ createdAt: -1 }).toArray();
+}
+
+export async function findApiKeyByIdForUser(id: string, userId: string): Promise<ApiKeyDocWithId | null> {
+  const col = await apiKeysCollection();
+  return await col.findOne({ _id: new ObjectId(id), userId });
+}
+
 export async function revokeApiKeyByIdForUser(id: string, userId: string) {
   const col = await apiKeysCollection();
   return await col.updateOne(
