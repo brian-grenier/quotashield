@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.36.7",
+    "@upstash/redis": "^1.36.1",
     "mongodb": "^7.0.0",
     "next": "16.1.1",
     "react": "19.2.3",

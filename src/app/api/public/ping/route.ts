@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { hashApiKey } from "@/lib/apiKeys";
 import { findActiveByHash, touchLastUsedAt } from "@/models/apiKeys";
 import { writeAuditLog } from "@/models/auditLogs";
+import { enforceRateLimitByKeyHash, incrementUsageCountersByKeyHash } from "@/lib/publicRateLimit";
 
 function extractApiKey(req: Request): string | null {
   const bearer = req.headers.get("authorization");
@@ -28,6 +29,11 @@ export async function GET(req: Request) {
     const apiKey = await findActiveByHash(keyHash);
     if (!apiKey) return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
 
+    const rl = await enforceRateLimitByKeyHash(keyHash);
+    if (!rl.ok) {
+      return NextResponse.json({ error: "rate_limited" }, { status: 429 });
+    }
+
     await touchLastUsedAt(apiKey._id.toString());
 
     await writeAuditLog({
@@ -39,6 +45,9 @@ export async function GET(req: Request) {
         method: "GET",
       },
     });
+
+    // Only count successful requests.
+    await incrementUsageCountersByKeyHash(keyHash);
 
     return NextResponse.json({ ok: true, ts: new Date().toISOString() });
   } catch (err) {
