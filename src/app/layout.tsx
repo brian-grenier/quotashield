@@ -7,6 +7,7 @@ import {
   SignOutButton,
   UserButton,
 } from "@clerk/nextjs";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -36,10 +37,19 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {hasClerkPublishableKey ? (
-          <ClerkProvider>
+          <ClerkProvider
+            appearance={{
+              elements: {
+                // Solid purple avatar (no gradient) for the user button.
+                userButtonAvatarBox: "bg-purple-600",
+              },
+            }}
+          >
             <header className="border-b">
               <div className="mx-auto flex max-w-4xl items-center justify-between p-4">
-                <div className="text-sm font-semibold">QuotaShield</div>
+                <Link href="/" className="text-lg font-semibold leading-none">
+                  QuotaShield
+                </Link>
                 <div className="flex items-center gap-3">
                   <SignedOut>
                     <SignInButton>
@@ -61,7 +71,9 @@ export default function RootLayout({
           <>
             <header className="border-b">
               <div className="mx-auto flex max-w-4xl items-center justify-between p-4">
-                <div className="text-sm font-semibold">QuotaShield</div>
+                <Link href="/" className="text-lg font-semibold leading-none">
+                  QuotaShield
+                </Link>
                 <div className="text-xs text-gray-600">
                   Clerk not configured (set env vars in <code>.env.local</code>)
                 </div>
