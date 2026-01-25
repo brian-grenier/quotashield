@@ -40,8 +40,8 @@ export default function RootLayout({
           <ClerkProvider
             appearance={{
               elements: {
-                // Solid purple avatar (no gradient) for the user button.
-                userButtonAvatarBox: "bg-purple-600",
+                // Solid orange avatar (no gradient) for the user button.
+                userButtonAvatarBox: "bg-orange-500",
               },
             }}
           >

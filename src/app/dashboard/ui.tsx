@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./dashboard.module.css";
 
 type ApiKeyPublic = {
@@ -40,8 +40,6 @@ export default function DashboardClient() {
   const [revokingId, setRevokingId] = useState<string | null>(null);
 
   const [rawKeyOnce, setRawKeyOnce] = useState<string | null>(null);
-
-  const activeCount = useMemo(() => keys.filter((k) => k.status === "active").length, [keys]);
 
   async function loadAll() {
     setLoading(true);
@@ -134,7 +132,7 @@ export default function DashboardClient() {
             <div className={styles.cardValue}>{usage.month}</div>
           </div>
         </div>
-        <p className={styles.muted}>Counts sum across your {activeCount} active key(s).</p>
+        <p className={styles.muted}>Sum across all keys.</p>
       </section>
 
       <section className={styles.section}>
