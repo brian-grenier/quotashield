@@ -2,6 +2,29 @@
   max-width: 960px;
   margin: 0 auto;
   padding: 24px 16px;
+
+  /* theme tokens (defaults for light mode) */
+  --border: rgba(0, 0, 0, 0.12);
+  --border-strong: rgba(0, 0, 0, 0.18);
+  --muted: rgba(0, 0, 0, 0.65);
+  --thead-bg: rgba(0, 0, 0, 0.03);
+  --banner-bg: rgba(17, 24, 39, 0.04);
+  --code-bg: #ffffff;
+  --btn-secondary-bg: #ffffff;
+  --btn-secondary-text: #111827;
+}
+
+@media (prefers-color-scheme: dark) {
+  .container {
+    --border: rgba(255, 255, 255, 0.16);
+    --border-strong: rgba(255, 255, 255, 0.22);
+    --muted: rgba(255, 255, 255, 0.7);
+    --thead-bg: rgba(255, 255, 255, 0.06);
+    --banner-bg: rgba(255, 255, 255, 0.06);
+    --code-bg: rgba(255, 255, 255, 0.08);
+    --btn-secondary-bg: rgba(255, 255, 255, 0.08);
+    --btn-secondary-text: var(--foreground);
+  }
 }
 
 .title {
@@ -13,7 +36,7 @@
 .section {
   margin-top: 24px;
   padding-top: 16px;
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-top: 1px solid var(--border);
 }
 
 .sectionTitle {
@@ -29,14 +52,14 @@
 }
 
 .card {
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px;
 }
 
 .cardLabel {
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.65);
+  color: var(--muted);
 }
 
 .cardValue {
@@ -47,7 +70,7 @@
 
 .muted {
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.65);
+  color: var(--muted);
   margin-top: 10px;
 }
 
@@ -70,14 +93,16 @@
   flex: 1;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--border-strong);
+  background: var(--background);
+  color: var(--foreground);
   font-size: 14px;
 }
 
 .button {
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--border-strong);
   background: #111827;
   color: white;
   font-size: 14px;
@@ -92,8 +117,9 @@
 .buttonSecondary {
   padding: 8px 10px;
   border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.18);
-  background: white;
+  border: 1px solid var(--border-strong);
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
   font-size: 13px;
   cursor: pointer;
 }
@@ -104,10 +130,10 @@
 }
 
 .banner {
-  border: 1px solid rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--border-strong);
   border-radius: 10px;
   padding: 12px;
-  background: rgba(17, 24, 39, 0.04);
+  background: var(--banner-bg);
   margin-bottom: 12px;
 }
 
@@ -118,7 +144,7 @@
 
 .bannerText {
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.65);
+  color: var(--muted);
   margin-bottom: 10px;
 }
 
@@ -127,15 +153,16 @@
   width: 100%;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px dashed rgba(0, 0, 0, 0.25);
-  background: white;
+  border: 1px dashed var(--border-strong);
+  background: var(--code-bg);
+  color: var(--foreground);
   overflow-x: auto;
   margin-bottom: 10px;
 }
 
 .tableWrap {
   overflow-x: auto;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--border);
   border-radius: 10px;
 }
 
@@ -148,15 +175,15 @@
 .table th,
 .table td {
   padding: 10px 12px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid var(--border);
   text-align: left;
   white-space: nowrap;
 }
 
 .table th {
   font-size: 12px;
-  color: rgba(0, 0, 0, 0.7);
-  background: rgba(0, 0, 0, 0.03);
+  color: var(--muted);
+  background: var(--thead-bg);
 }
 
 .badgeActive,
@@ -165,7 +192,7 @@
   font-size: 12px;
   padding: 2px 8px;
   border-radius: 999px;
-  border: 1px solid rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--border-strong);
 }
 
 .badgeActive {
