@@ -49,72 +49,6 @@ Public clients (API key) -> Next.js Route Handlers -> (MongoDB / Redis)
 | GET | `/api/debug/db` | none | Internal: MongoDB ping | `{ ok: true }` or `{ ok: false, error }` |
 | GET | `/api/debug/mongo` | none | Internal: MongoDB ping + db name | `{ ok: true, db }` or `{ ok: false, error }` |
 
-**API key headers**:
-
-- `Authorization: Bearer <rawApiKey>`
-- or `x-api-key: <rawApiKey>`
-
-## Environment Variables
-
-Copy `env.example` to `.env.local` and fill in values:
-
-- **Clerk (M2+)**
-  - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
-  - `CLERK_SECRET_KEY`
-- **MongoDB Atlas (M3+)**
-  - `MONGODB_URI`
-- **API keys (M4+)**
-  - `API_KEY_PEPPER` (server-only secret used when hashing keys)
-- **Upstash Redis (M6+)**
-  - `UPSTASH_REDIS_REST_URL`
-  - `UPSTASH_REDIS_REST_TOKEN`
-
-## Local Development
-
-1) Install dependencies:
-
-```bash
-npm install
-```
-
-2) Create `.env.local`:
-
-```bash
-cp env.example .env.local
-```
-
-3) Fill in `.env.local` with your credentials (Clerk, MongoDB, Upstash).
-
-4) Run dev server:
-
-```bash
-npm run dev
-```
-
-5) Open:
-- Landing page: `http://localhost:3000/`
-- Dashboard: `http://localhost:3000/dashboard`
-
-## cURL Examples
-
-### Call the API-key protected endpoint (success)
-
-First, create a key from the Dashboard (`/dashboard`) and copy the one-time `rawKey`.
-
-Then:
-
-```bash
-curl -i http://localhost:3000/api/public/ping \
-  -H "Authorization: Bearer PASTE_RAW_KEY_HERE"
-```
-
-Or:
-
-```bash
-curl -i http://localhost:3000/api/public/ping \
-  -H "x-api-key: PASTE_RAW_KEY_HERE"
-```
-
 ### Rate limit example (expect 429 after ~30 requests/min)
 
 ```bash
@@ -131,22 +65,6 @@ Expected: first ~30 return `200`, then `429` with `{ "error": "rate_limited" }`.
 ### Notes on `curl` for Clerk-protected endpoints
 
 `/api/keys` and `/api/usage` require a **Clerk session** (browser cookies). For local testing, the simplest path is to use the Dashboard UI. (You *can* call them with `curl` by forwarding your Clerk cookies, but it’s intentionally not optimized for a pure-curl workflow.)
-
-## Deployment (Vercel)
-
-1) Push your repo to GitHub.
-2) Create a new project in Vercel and import the repo.
-3) Add environment variables in Vercel (Project → Settings → Environment Variables):
-   - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
-   - `CLERK_SECRET_KEY`
-   - `MONGODB_URI`
-   - `API_KEY_PEPPER`
-   - `UPSTASH_REDIS_REST_URL`
-   - `UPSTASH_REDIS_REST_TOKEN`
-4) Deploy.
-5) In Clerk, configure production URLs:
-   - Add your Vercel domain to allowed origins / redirect URLs as required by Clerk.
-   - Ensure sign-in/sign-up redirects point back to your deployed app.
 
 ## Security Notes (Brief)
 
